@@ -1,0 +1,84 @@
+apiVersion : apps/v1
+kind: configMap
+metadata: 
+  name : cart-config
+  namespace: roboshop
+  labels:
+    project : roboshop
+    component: cart 
+    tire: backend
+data:
+  REDIS_HOST: "redis"
+  CATALOGUE_HOST: "catalogue"
+  CATALOGUE_PORT: "8080"
+
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+ name: cart 
+ namespace: roboshop
+ labels:
+   project : roboshop
+   component: cart
+   tire: backend   
+spec: 
+ replicas: 2
+ selector:
+   matchLabels:
+    project : roboshop
+    component: cart 
+    tire: backend
+ template: 
+  metadata: 
+  labels:
+   project : roboshop
+   component: cart
+   tire: backend
+  spec:
+   containers:
+    name: cart 
+    image: taruntejamb/cart:1.0.0
+    imagePullPolicy: always
+    resources:
+      requests:
+       cpu : 150m
+       memory: 64Mi
+      limits:
+       cpu: 200m
+       memory: 128Mi
+    livenessProbe:
+      httpGet:
+       path: /health
+       port: 8080
+      failureThreshold: 2
+      periodSeconds: 10
+    readinessProbe:
+      tcpSocket:
+        port: 8080
+      initialDelaySeconds: 15
+      failureThreshold: 2
+      periodSeconds: 10
+    envFrom:
+     configMapRef:
+      - name : cart-config
+
+---
+apiVersion: v1 
+kind: Service
+metadata: 
+ name : cart
+ namespace: roboshop
+ labels: 
+  project : roboshop
+  component: cart
+  tire: backend 
+spec: 
+ selector:
+  project : roboshop
+  component: cart
+  tire: backend 
+ ports: 
+  protocol: TCP
+  port: 8080
+  targetPort: 8080

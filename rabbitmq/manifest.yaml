@@ -1,0 +1,65 @@
+apiVersion: v1 
+kind: configMap
+metadata: 
+ name: rabbitmq-config 
+ namespace: roboshop 
+ labels: 
+   project : roboshop
+   component: mysql 
+   tire: db
+data: 
+  RABBITMQ_DEFAULT_USER: roboshop
+  RABBITMQ_DEFAULT_PASS: roboshop123
+
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata: 
+ name : rabbimq
+ namespace: roboshop
+ labels: 
+   project : roboshop
+   component: mysql 
+   tire: db
+spec: 
+ replicas: 1
+ selector: 
+  matchLabels:
+   project : roboshop
+   component: mysql 
+   tire: db
+ template: 
+  metadata: 
+   labels:   
+    project : roboshop
+    component: mysql 
+    tire: db 
+  spec: 
+   containers: 
+    - name: rabbitmq 
+      image: rabbitmq:3.0
+      envFrom: 
+       configMapRef:
+       - name: rabbitmq-config
+      
+
+---
+apiVersion: v1 
+kind: Service
+metadata: 
+ name : rabbitmq
+ namespace: roboshop
+ labels: 
+    project : roboshop
+    component: mysql 
+    tire: db 
+spec: 
+ selector: 
+    project : roboshop
+    component: mysql 
+    tire: db 
+ ports: 
+  - protocol: TCP
+    port: 5672
+    targetPort: 5672
+ 

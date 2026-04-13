@@ -1,0 +1,83 @@
+apiVersion: v1 
+kind: configMap
+metadata:
+ name: user-config
+ namespace: roboshop
+ labels:
+    project : roboshop
+    component: user 
+    tire: backend
+data:
+ MONGO: "true" 
+ REDIS_URL: "redis://redis:6379"
+ MONGO_URL: "mongodb://mongodb:27017/users"
+
+---
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata: 
+  labels:
+    project : roboshop
+    component: user 
+    tire: backend
+ spec: 
+   replicas: 2
+   selector:
+    matchLabels:
+     project : roboshop
+     component: user 
+     tire: backend
+   template:
+    metadata: 
+     name: user
+     namespace: roboshop
+     labels:
+      project : roboshop
+      component: user 
+      tire: backend
+    spec: 
+      containers:
+        - name: user
+          image: taruntejamb/user:1.0.0
+          imagePullPolicy: always
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "150m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+          livenessProbe:
+              httpGet:
+               path: /health
+               port: 8080
+              failureThreshold: 2
+              periodSeconds: 10
+          readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 15
+              failureThreshold: 2
+              periodSeconds: 10
+          envFrom:
+          - configMapRef:
+              name: user-config  
+
+---
+apiVersion: v1 
+kind: Service
+metadata: 
+ name: user
+ labels:
+  project : roboshop
+  component: user 
+  tire: backend
+spec:
+ selector:
+  project : roboshop
+  component: user 
+  tire: backend
+ports: 
+ protocol: TCP
+ port: 8080
+ targetPort: 8080
