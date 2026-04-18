@@ -23,7 +23,7 @@ spec:
    spec:  
     containers:
       - name : mongodb
-        image: taruntejamb/mongodb:1.0.0
+        image: taruntejamb/mongo:1.0.0
 
 
 ---
