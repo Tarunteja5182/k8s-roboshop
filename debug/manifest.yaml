@@ -6,7 +6,7 @@ metadata:
   labels: 
    project: roboshop 
 spec: 
- - containers: 
-     name: debug 
-     image: taruntejamb/debug:1.0.0
+ containers: 
+  - name: debug 
+    image: taruntejamb/debug:1.0.0
  
