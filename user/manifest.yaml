@@ -16,12 +16,14 @@ data:
  apiVersion: apps/v1
  kind: Deployment
  metadata: 
+  name: user
+  namespace: roboshop
   labels:
     project : roboshop
     component: user 
     tire: backend
  spec: 
-   replicas: 2
+   replicas: 1
    selector:
     matchLabels:
      project : roboshop
@@ -78,6 +80,6 @@ spec:
   component: user 
   tire: backend
 ports: 
- protocol: TCP
- port: 8080
- targetPort: 8080
+- protocol: TCP
+  port: 8080
+  targetPort: 8080
