@@ -1,5 +1,5 @@
-apiVersion : apps/v1
-kind: configMap
+apiVersion : v1
+kind: ConfigMap
 metadata: 
   name : cart-config
   namespace: roboshop
@@ -39,7 +39,7 @@ spec:
    containers:
     name: cart 
     image: taruntejamb/cart:1.0.0
-    imagePullPolicy: always
+    imagePullPolicy: Always
     resources:
       requests:
        cpu : 150m
@@ -79,6 +79,6 @@ spec:
   component: cart
   tire: backend 
  ports: 
-  protocol: TCP
-  port: 8080
-  targetPort: 8080
+ - protocol: TCP
+   port: 8080
+   targetPort: 8080
