@@ -1,7 +1,7 @@
 apiVersion: v1 
 kind: ConfigMap
 metadata: 
- name: shipping-configmap 
+ name: shipping-config
  namespace: roboshop
  labels:
     project: roboshop
