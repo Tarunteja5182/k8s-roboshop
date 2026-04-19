@@ -1,5 +1,5 @@
 apiversion: v1 
-kind: configMap 
+kind: ConfigMap 
 metadata: 
  name: payment-config
  namesapce: roboshop
@@ -20,7 +20,7 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
-  name: payment-config 
+  name: payment
   namespace: roboshop 
   labels: 
     project : roboshop
