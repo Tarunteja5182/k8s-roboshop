@@ -31,10 +31,10 @@ spec:
     tire: backend
  template: 
   metadata: 
-  labels:
-   project : roboshop
-   component: cart
-   tire: backend
+   labels:
+    project : roboshop
+    component: cart
+    tire: backend
   spec:
    containers:
     - name: cart 
@@ -49,8 +49,8 @@ spec:
          memory: 128Mi
       livenessProbe:
         httpGet:
-        path: /health
-        port: 8080
+          path: /health
+          port: 8080
         failureThreshold: 2
         periodSeconds: 10
       readinessProbe:
@@ -60,8 +60,8 @@ spec:
         failureThreshold: 2
         periodSeconds: 10
       envFrom:
-      configMapRef:
-        - name : cart-config
+       - configMapRef:
+          name : cart-config
 
 ---
 apiVersion: v1 
